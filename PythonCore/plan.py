@@ -34,7 +34,7 @@ def dfs(plan: Plan) -> list:
     nrOfCourses = plan.howMuchCourses()
     combinedGroups = []
     visited = []
-    DFS_Util(plan.courseList, 0, 0, nrOfCourses, visited, combinedGroups)
+    DFS_Util(plan.courseList, 0, nrOfCourses, visited, combinedGroups)
     return combinedGroups    
 
 
