@@ -8,7 +8,7 @@ class TimeSlot:
 
 class Group:
     def __init__(self, type, number, person):
-        self.slots = []
+        self.slotList = []
         self.type = type
         self.number = number
         self.person = person
@@ -19,11 +19,11 @@ class Group:
 class Course:
     def __init__(self, name):
         self.name = name
-        self.groups = []
+        self.groupList = []
 
 class Plan:
     def __init__(self):
-        self.courses =  []
+        self.courseList =  []
 
         
     
