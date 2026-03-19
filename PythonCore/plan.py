@@ -14,7 +14,7 @@ def checkConflict(group: Group, compareList: list[Group]) -> bool:
 
 
 def DFS_Util(courseList: list[Course], nr, typeNr, max, visited: list, combinedGroups: list):
-    print(f"{nr} - {typeNr} \n")
+    print(f"{nr} - {typeNr} - {courseList[nr].typeList} \n")
     if(nr >= max):
             return
     for group in courseList[nr].typeList[typeNr]:
