@@ -13,10 +13,11 @@ def checkConflict(group: Group, compareList: list[Group]) -> bool:
     return False 
 
 
-def DFS_Util(courseList: list[Course], nr, max, visited: list, combinedGroups: list):
+def DFS_Util(courseList: list[Course], nr, typeNr, max, visited: list, combinedGroups: list):
+    print(f"{nr} - {typeNr} \n")
     if(nr >= max):
             return
-    for group in courseList[nr].groupList:
+    for group in courseList[nr].typeList[typeNr]:
         if not checkConflict(group, visited):
             visited.append(group)
         else:
@@ -25,18 +26,20 @@ def DFS_Util(courseList: list[Course], nr, max, visited: list, combinedGroups: l
         if(len(visited) == max):
             combinedGroups.append(visited.copy())
         else:
-            DFS_Util(courseList, nr+1, max, visited, combinedGroups)
+            if typeNr == len(courseList[nr].typeList) - 1:
+                DFS_Util(courseList, nr+1, 0, max, visited, combinedGroups)
+            else:
+                DFS_Util(courseList, nr, typeNr + 1, max, visited, combinedGroups)
         if len(visited) != 0:
              visited.pop()
         
 
 def dfs(plan: Plan) -> list:
-    nrOfCourses = plan.howMuchCourses()
+    nrOfGroups = plan.howMuchGroups()
     combinedGroups = []
     visited = []
-    DFS_Util(plan.courseList, 0, nrOfCourses, visited, combinedGroups)
+    print(nrOfGroups)
+    DFS_Util(plan.courseList, 0, 0, nrOfGroups, visited, combinedGroups)
     return combinedGroups    
 
 
-def optimize_plan(plan: Plan):
-    scheduleList = dfs(plan)

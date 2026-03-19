@@ -31,13 +31,16 @@ class Group:
 class Course:
     def __init__(self, name):
         self.name = name
-        self.groupList = []
+        self.typeList = [] #list[list[Group]]
 
 class Plan:
     def __init__(self):
         self.courseList =  []
-    def howMuchCourses(self):
-        return len(self.courseList)
+    def howMuchGroups(self):
+        i = 0
+        for course in self.courseList:
+            i = i + len(course.typeList)
+        return i
 
         
     

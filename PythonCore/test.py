@@ -62,5 +62,3 @@ for plan in list:
     if i == 10:
         break            
     
-
-# print(list)

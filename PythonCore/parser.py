@@ -106,9 +106,22 @@ def parseHTML():
         if courseName not in courseDict:
             courseDict[courseName] = classes.Course(courseName)
         
+        isTypeIncluded = False
+        i = 0
+        typeNr = 0
+        for groupList in courseDict[courseName].typeList:
+            if len(groupList) == 0:
+                break
+            if groupList[0].type == groupType:
+                typeNr = i
+                isTypeIncluded = True
+                break
+            i = i + 1
+        if isTypeIncluded == False:
+            courseDict[courseName].typeList.append([])
+
         isGroupIncluded = False
-        
-        for group in courseDict[courseName].groupList:
+        for group in courseDict[courseName].typeList[typeNr]:
             if group.giveKey() == groupKey:
                 isGroupIncluded = True
                 group.slotList.append(slot)
@@ -116,7 +129,7 @@ def parseHTML():
         if isGroupIncluded == False:
             groupToInsert = classes.Group(groupType, groupNumber, person, courseDict[courseName])
             groupToInsert.slotList.append(slot)
-            courseDict[courseName].groupList.append(groupToInsert)
+            courseDict[courseName].typeList[typeNr].append(groupToInsert)
 
     #Creating plan class:
     plan = classes.Plan()
