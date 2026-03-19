@@ -1,7 +1,7 @@
-from classes import *
+import classes
 
-am1 = Group(1, "Moszyński")
-slot1 = TimeSlot(2, 60*12, 0)
+am1 = classes.Group("ĆW", 1, "Moszyński")
+slot1 = classes.TimeSlot(2, 60*12, 0)
 
 am1.slots.append(slot1)
 
