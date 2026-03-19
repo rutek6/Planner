@@ -23,6 +23,8 @@ class Group:
         return f"{self.type}-{self.number}, {self.person}: {self.slotList}"
     def __repr__(self):
         return f"{self.course.name}: {self.type}-{self.number}, {self.person} \n"
+    def giveKey(self):
+        return f"{self.type}-{self.number}"
 
 class Course:
     def __init__(self, name):
