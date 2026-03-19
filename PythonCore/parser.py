@@ -107,7 +107,7 @@ def parseHTML():
             courseDict[courseName] = classes.Course(courseName)
         
         isGroupIncluded = False
-
+        
         for group in courseDict[courseName].groupList:
             if group.giveKey() == groupKey:
                 isGroupIncluded = True

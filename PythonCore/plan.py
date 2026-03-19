@@ -6,9 +6,9 @@ def checkConflict(group: Group, compareList: list[Group]) -> bool:
         for compareSlot in groupFromList.slotList:
             for groupSlot in group.slotList:
                 if(groupSlot.day == compareSlot.day and groupSlot.week == compareSlot.week):
-                    if(groupSlot.start > compareSlot.start and groupSlot.start < compareSlot.end):
+                    if(groupSlot.start >= compareSlot.start and groupSlot.start <= compareSlot.end):
                         return True
-                    if(groupSlot.end > compareSlot.start and groupSlot.end < compareSlot.end):
+                    if(groupSlot.end >= compareSlot.start and groupSlot.end <= compareSlot.end):
                             return True
     return False 
 
@@ -34,7 +34,7 @@ def dfs(plan: Plan) -> list:
     nrOfCourses = plan.howMuchCourses()
     combinedGroups = []
     visited = []
-    DFS_Util(plan.courseList, 0, nrOfCourses, visited, combinedGroups)
+    DFS_Util(plan.courseList, 0, 0, nrOfCourses, visited, combinedGroups)
     return combinedGroups    
 
 

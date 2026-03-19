@@ -10,6 +10,8 @@ class TimeSlot:
         self.week = week
     def __repr__(self):
         return f"{(int)(self.start / 60)}:{self.start % 60} - {(int)(self.end / 60)}:{self.end % 60}, day: {self.day}"
+    def giveTime(self):
+        return f"{(int)(self.start / 60)}:{self.start % 60} - {(int)(self.end / 60)}"
 
 class Group:
     def __init__(self, type, number, person, course):
