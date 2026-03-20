@@ -111,14 +111,21 @@ def parseHTML():
         typeNr = 0
         for groupList in courseDict[courseName].typeList:
             if len(groupList) == 0:
-                break
+                i+=1
+                continue
+            
+            # print("type w liście:", groupList[0].type)
+            # print("szukany type:", groupType)
             if groupList[0].type == groupType:
+                # print("znaleziono: ", i)
                 typeNr = i
                 isTypeIncluded = True
                 break
-            i = i + 1
+            i += 1
+        # print(typeNr)
         if isTypeIncluded == False:
             courseDict[courseName].typeList.append([])
+            typeNr = len(courseDict[courseName].typeList) - 1
 
         isGroupIncluded = False
         for group in courseDict[courseName].typeList[typeNr]:

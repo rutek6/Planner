@@ -1,6 +1,7 @@
 import classes
 from plan import dfs
 from parser import parseHTML
+
 # am = classes.Course("AM")
 # akso = classes.Course("AKSO")
 # fiz = classes.Course("FIZ")
@@ -47,9 +48,12 @@ from parser import parseHTML
 
 # print(list)
 
-plan = parseHTML()
 
+
+plan = parseHTML()
 list = dfs(plan)
+
+
 i = 0
 for plan in list:
     for day in range(5):
@@ -59,6 +63,6 @@ for plan in list:
                 if slot.day == day:
                     print(f"{group.course.name} - {group.giveKey()} : {slot.giveTime()}")
     i = i+1
-    if i == 10:
+    if i == 1000:
         break            
-    
+

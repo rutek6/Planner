@@ -36,6 +36,14 @@ class Course:
 class Plan:
     def __init__(self):
         self.courseList =  []
+    def __str__(self):
+        s = ""
+        for course in self.courseList:
+            s = s + f"\n{course.name}"
+            for type in course.typeList:
+                for group in type:
+                    s = s + f"\n{group.type} - {group.number}"
+        return s
     def howMuchGroups(self):
         i = 0
         for course in self.courseList:
