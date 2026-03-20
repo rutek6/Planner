@@ -14,12 +14,13 @@ class TimeSlot:
         return f"{(int)(self.start / 60)}:{self.start % 60} - {(int)(self.end / 60)}"
 
 class Group:
-    def __init__(self, type, number, person, course):
+    def __init__(self, type, number, person, course, groupId):
         self.slotList = []
         self.type = type
         self.number = number
         self.person = person
         self.course = course
+        self.groupId = groupId
 
     def __str__(self):
         return f"{self.type}-{self.number}, {self.person}: {self.slotList}"
@@ -42,7 +43,7 @@ class Plan:
             s = s + f"\n{course.name}"
             for type in course.typeList:
                 for group in type:
-                    s = s + f"\n{group.type} - {group.number}"
+                    s = s + f"\n{group.type} - {group.number}   ID: {group.groupId}"
         return s
     def howMuchGroups(self):
         i = 0

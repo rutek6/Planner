@@ -22,7 +22,7 @@ def parseHTML():
     #course_name -> list[Group]
     courseDict = {}
 
-
+    groupId = 0
     for entry in entriesList:
         #1. Course name
         courseName = entry.get("name", "").strip()
@@ -134,9 +134,10 @@ def parseHTML():
                 group.slotList.append(slot)
 
         if isGroupIncluded == False:
-            groupToInsert = classes.Group(groupType, groupNumber, person, courseDict[courseName])
+            groupToInsert = classes.Group(groupType, groupNumber, person, courseDict[courseName], groupId)
             groupToInsert.slotList.append(slot)
             courseDict[courseName].typeList[typeNr].append(groupToInsert)
+            groupId += 1
 
     #Creating plan class:
     plan = classes.Plan()
