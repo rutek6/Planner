@@ -1,6 +1,7 @@
 import sys
 from classes import *
 from parser import parseHTML
+from conflictGraph import checkOverlap
 from plan import dfs
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
@@ -44,10 +45,7 @@ class Schedule(QWidget):
                            """)
         self.resize(1200, 800)
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
-
         self.drawGrid()
-        self.testEvents()
-        
 
     def drawGrid(self):
         for i, day in enumerate(self.days):
@@ -55,14 +53,14 @@ class Schedule(QWidget):
             label.move(self.leftMargin + i*self.dayWidth + 2*self.dayWidth/5 - 5, #TO-DO: FIX DAY NAME ALIGNMENT
                         self.topMargin)
             
-            hLine = QLabel(self)
-            hLine.setStyleSheet("""
+            vLine = QLabel(self)
+            vLine.setStyleSheet("""
                                 background-color: #C4C4C4;
                                 """)
-            hLine.setGeometry(self.leftMargin + i*self.dayWidth,
+            vLine.setGeometry(self.leftMargin + i*self.dayWidth,
                             self.topMargin,
                             1, 
-                            (self.end - self.start)*self.verticalSpace)
+                            (self.end - self.start + 2)*self.verticalSpace)
 
         for i in range(self.start, self.end + 1):
             y = self.topMargin + 5 + (i-self.start+1)*self.verticalSpace
@@ -70,11 +68,11 @@ class Schedule(QWidget):
             hourLabel = QLabel(f"{i}:00", self)
             hourLabel.move(15, y) 
 
-            vLine = QLabel(self)
-            vLine.setStyleSheet("""
+            hLine = QLabel(self)
+            hLine.setStyleSheet("""
                                 background-color: #C4C4C4;
                                 """)
-            vLine.setGeometry(self.leftMargin, y, len(self.days)*self.dayWidth, 1)
+            hLine.setGeometry(self.leftMargin, y, len(self.days)*self.dayWidth, 1)
 
     def addEvent(self, day, start, end, text, color, overlap):
         x = self.leftMargin + self.dayWidth*day
@@ -89,21 +87,7 @@ class Schedule(QWidget):
         block = TimetableEntry(text, color, self)
         block.setGeometry(x, y, width, height)
         
-
-    def testEvents(self):
-        self.addEvent(0, 12, 13, "AM1", "#3E445C", 2)
-
-
-        
-
-if __name__ == "__main__":
-    app = QApplication()
-    schedule = Schedule()
-    
-    parsed = parseHTML()
-    plan = dfs(parsed)
-
-    firstPlan = plan[0]
+def prepareForAdding(firstPlan):
     listOfGroups = []
     for group in firstPlan:
         for slot in group.slotList:
@@ -117,9 +101,30 @@ if __name__ == "__main__":
                 color = "#7D9447"
             else:
                 color = "#C805E2"
-            listOfGroups.append([day, start, end, name, color])
+            overlap = 0
+            for compareSlot in listOfGroups:
+                if not day == compareSlot[0]:
+                    continue
+                if start >= compareSlot[1] and start <= compareSlot[2]:
+                    compareSlot[5] = 1
+                    overlap = 2
+                if end >= compareSlot[1] and end <= compareSlot[2]:
+                    compareSlot[5] = 1
+                    overlap = 2
+            listOfGroups.append([day, start, end, name, color, overlap])
+    return listOfGroups        
+
+
+if __name__ == "__main__":
+    app = QApplication()
+    schedule = Schedule()
     
+    parsed = parseHTML()
+    plan = dfs(parsed)
+
+    firstPlan = plan[0]
+    listOfGroups = prepareForAdding(firstPlan)
     for item in listOfGroups:
-        schedule.addEvent(item[0],item[1],item[2],item[3], item[4], True)
+        schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
     schedule.show()
     sys.exit(app.exec())
