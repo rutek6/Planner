@@ -40,7 +40,6 @@ def dfs(plan: Plan) -> list:
     combinedGroups = []
     visited = []
     conflictGraph = createConflictGraph(plan)
-    print(conflictGraph)
     DFS_Util(plan.courseList, 0, 0, nrOfGroups, visited, combinedGroups, conflictGraph)
     return combinedGroups    
 
