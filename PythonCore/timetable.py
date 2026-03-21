@@ -81,14 +81,14 @@ class Schedule(QWidget):
             hLine.setGeometry(self.leftMargin, y, len(self.days)*self.dayWidth, 1)
 
     def addEvent(self, day, start, end, text, color, overlap):
-        x = self.leftMargin + self.dayWidth*day
+        x = self.leftMargin + self.dayWidth*day + 5
         y = self.topMargin + 5 + (start - self.start + 1)*self.verticalSpace + 2
         width = self.dayWidth - 10
         if overlap == 1:
             width /= 2
         elif overlap == 2:
             width /= 2
-            x += self.dayWidth/2
+            x += self.dayWidth/2 - 2.5
         height = (end-start)*self.verticalSpace - 2
         block = TimetableEntry(text, color, self)
         block.setGeometry(x, y, width, height)
@@ -97,10 +97,11 @@ def prepareForAdding(firstPlan):
     listOfGroups = []
     for group in firstPlan:
         for slot in group.slotList:
-            name = f"{group.course.name} \n {group.giveKey()} "
+            
             day = slot.day
             start = slot.start / 60
             end = slot.end / 60
+            name = f"""{group.course.name} \n {group.giveKey()} \n {(slot.start // 60)}:{slot.start % 60:02d} - {(slot.end // 60)}:{slot.end % 60:02d}"""
             if group.type == "CW":
                 color = "#3E445C"
             elif group.type == "WYK":
