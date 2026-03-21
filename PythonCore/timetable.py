@@ -20,13 +20,18 @@ from PySide6.QtWidgets import (QApplication,
 class TimetableEntry(QLabel):
     def __init__(self, text, color, parent=None):
         super().__init__(text, parent)
-        self.setStyleSheet(f"""background-color: {color};
+        self.setStyleSheet(f"""QLabel{{ background-color: {color};
                             border-radius: 12px;
                             padding: 5px;
                             color: white;
-                            font-size: 11px;""")
+                            font-size: 11px;}}
+                            QLabel::hover{{
+                            background-color: blue;}}"""
+                            )
         self.setWordWrap(True)
-        
+        self.setToolTip(f"{text}")
+    
+    
 
 
 class Schedule(QWidget):
@@ -43,7 +48,7 @@ class Schedule(QWidget):
         self.setStyleSheet("""
                            background-color: #761F21;
                            """)
-        self.resize(1200, 800)
+        self.resize(1350, 800)
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
         self.drawGrid()
 
@@ -91,7 +96,7 @@ def prepareForAdding(firstPlan):
     listOfGroups = []
     for group in firstPlan:
         for slot in group.slotList:
-            name = group.course.name
+            name = f"{group.course.name} \n {group.giveKey()} "
             day = slot.day
             start = slot.start / 60
             end = slot.end / 60
