@@ -33,7 +33,6 @@ def DFS_Util(
         if len(visited) != 0:
              visited.pop()
         
-
 def dfs(plan: Plan) -> list[list[Group]]:
     nrOfGroups = plan.howMuchGroups()
     combinedGroups = []

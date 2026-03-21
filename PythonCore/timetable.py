@@ -42,7 +42,6 @@ class Schedule(QWidget):
         self.topMargin = 10
         self.leftMargin = 60
         self.rightMargin = 60
-        #self.dayWidth = 175
         self.dayWidth = 250
         self.verticalSpace = 50
         self.start = 7
@@ -50,7 +49,7 @@ class Schedule(QWidget):
         self.setStyleSheet("""
                            background-color: #2A2A2A;
                            """)
-        self.resize(1350, 800)
+        # self.resize(1350, 800)
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
         self.drawGrid()
 
@@ -68,7 +67,15 @@ class Schedule(QWidget):
                             self.topMargin,
                             1, 
                             (self.end - self.start + 2)*self.verticalSpace)
-
+        vLine = QLabel(self)
+        vLine.setStyleSheet("""
+                            background-color: #C4C4C4;
+                            """)
+        vLine.setGeometry(self.leftMargin + 5*self.dayWidth,
+                            self.topMargin,
+                            1, 
+                            (self.end - self.start + 2)*self.verticalSpace)
+        
         for i in range(self.start, self.end + 1):
             y = self.topMargin + 5 + (i-self.start+1)*self.verticalSpace
 
@@ -93,12 +100,16 @@ class Schedule(QWidget):
         height = (end-start)*self.verticalSpace - 2
         block = TimetableEntry(text, color, self)
         block.setGeometry(x, y, width, height)
+        block.raise_()
+        block.show()
+    
+    def destroyPlan(self):
+        return 0
         
 def prepareForAdding(firstPlan):
     listOfGroups = []
     for group in firstPlan:
         for slot in group.slotList:
-            
             day = slot.day
             start = slot.start / 60
             end = slot.end / 60
@@ -122,17 +133,16 @@ def prepareForAdding(firstPlan):
             listOfGroups.append([day, start, end, name, color, overlap])
     return listOfGroups        
 
-
-if __name__ == "__main__":
-    app = QApplication()
-    schedule = Schedule()
+# if __name__ == "__main__":
+#     app = QApplication()
+#     schedule = Schedule()
     
-    parsed = parseHTML()
-    plan = dfs(parsed)
-    plan.sort(reverse=False, key=evaluatePlan)
-    firstPlan = plan[10]
-    listOfGroups = prepareForAdding(firstPlan)
-    for item in listOfGroups:
-        schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
-    schedule.show()
-    sys.exit(app.exec())
+#     parsed = parseHTML()
+#     plan = dfs(parsed)
+#     plan.sort(reverse=False, key=evaluatePlan)
+#     firstPlan = plan[10]
+#     listOfGroups = prepareForAdding(firstPlan)
+#     for item in listOfGroups:
+#         schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+#     schedule.show()
+#     sys.exit(app.exec())

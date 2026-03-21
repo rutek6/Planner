@@ -11,8 +11,6 @@ def getSlotList(plan: Plan):
             slots.append(slot)
     return slots
 
-
-
 def countConflicts(slots):
     counter = 0
     for slot1 in slots:
@@ -29,9 +27,6 @@ def countConflicts(slots):
                 continue
     return counter            
 
-
-
-
 def countGapLength(slots):
     slotsByDay = {d: [] for d in range(5)}
     for slot in slots:
@@ -44,14 +39,10 @@ def countGapLength(slots):
         for j, slot in enumerate(slotsByDay[i]):
             if j == 0:
                 continue
-            # print(slotsByDay[i][j-1])
-            # print(f"{slot}\n")
             add = slot.start - slotsByDay[i][j-1].end
             if add > 0:
                 gapCount += add
     return gapCount
-
-
 
 def evaluatePlan(plan: list[Group]):
     slots = getSlotList(plan) #list[TimeSlot]
