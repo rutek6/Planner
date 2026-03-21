@@ -18,7 +18,6 @@ def DFS_Util(
           combinedGroups: list, 
           conflictGraph
         ):
-    # print(f"{nr} - {typeNr} - {courseList[nr].typeList} \n")
     if(len(visited) >= max):
             combinedGroups.append(visited.copy())
             return
@@ -35,7 +34,7 @@ def DFS_Util(
              visited.pop()
         
 
-def dfs(plan: Plan) -> list:
+def dfs(plan: Plan) -> list[list[Group]]:
     nrOfGroups = plan.howMuchGroups()
     combinedGroups = []
     visited = []

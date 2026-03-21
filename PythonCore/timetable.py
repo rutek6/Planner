@@ -2,6 +2,7 @@ import sys
 from classes import *
 from parser import parseHTML
 from conflictGraph import checkOverlap
+from optimizer import evaluatePlan
 from plan import dfs
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
@@ -126,8 +127,8 @@ if __name__ == "__main__":
     
     parsed = parseHTML()
     plan = dfs(parsed)
-
-    firstPlan = plan[0]
+    plan.sort(reverse=False, key=evaluatePlan)
+    firstPlan = plan[10]
     listOfGroups = prepareForAdding(firstPlan)
     for item in listOfGroups:
         schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
