@@ -33,8 +33,8 @@ class Menu(QWidget):
         layout = QHBoxLayout()
         layout.addWidget(self.button)
         layout.addWidget(self.button2)
-        layout.addWidget(self.planLabel)
         layout.addWidget(self.button3)
+        layout.addWidget(self.planLabel)
         
         self.setLayout(layout)
 
@@ -73,11 +73,11 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
     def getHTML(self):
-        # path = QFileDialog.getOpenFileName()
-        # parsed = parseHTML(path[0])
-        parsed = parseHTML("plan.html")
+        path = QFileDialog.getOpenFileName()
+        parsed = parseHTML(path[0])
+        # parsed = parseHTML("plan.html")
         self.plan = dfs(parsed)
-        self.plan.sort(reverse=True, key=evaluatePlan)
+        self.plan.sort(key=evaluatePlan)
         firstPlan = self.plan[0]
         listOfGroups = prepareForAdding(firstPlan)
         for item in listOfGroups:

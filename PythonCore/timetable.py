@@ -46,6 +46,7 @@ class Schedule(QWidget):
         self.verticalSpace = 50
         self.start = 7
         self.end = 20
+        self.displayedEvents = []
         self.setStyleSheet("""
                            background-color: #2A2A2A;
                            """)
@@ -102,9 +103,12 @@ class Schedule(QWidget):
         block.setGeometry(x, y, width, height)
         block.raise_()
         block.show()
+        self.displayedEvents.append(block)
     
     def destroyPlan(self):
-        return 0
+        for event in self.displayedEvents:
+            event.deleteLater()
+        self.displayedEvents.clear()
         
 def prepareForAdding(firstPlan):
     listOfGroups = []
