@@ -24,10 +24,11 @@ class TimetableEntry(QLabel):
         self.setStyleSheet(f"""QLabel{{ background-color: {color};
                             border-radius: 12px;
                             padding: 5px;
-                            color: white;
+                            color: #EAEAEA;
                             font-size: 11px;}}
                             QLabel::hover{{
-                            background-color: blue;}}"""
+                            border: 1px solid black;
+                            }}"""
                             )
         self.setWordWrap(True)
         self.setToolTip(f"{text}")
@@ -47,7 +48,7 @@ class Schedule(QWidget):
         self.start = 7
         self.end = 20
         self.setStyleSheet("""
-                           background-color: #761F21;
+                           background-color: #2A2A2A;
                            """)
         self.resize(1350, 800)
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
@@ -103,11 +104,11 @@ def prepareForAdding(firstPlan):
             end = slot.end / 60
             name = f"""{group.course.name} \n {group.giveKey()} \n {(slot.start // 60)}:{slot.start % 60:02d} - {(slot.end // 60)}:{slot.end % 60:02d}"""
             if group.type == "CW":
-                color = "#3E445C"
+                color = "#E05555"
             elif group.type == "WYK":
-                color = "#7D9447"
+                color = "#6F6F6F"
             else:
-                color = "#C805E2"
+                color = "#99582A"
             overlap = 0
             for compareSlot in listOfGroups:
                 if not day == compareSlot[0]:
