@@ -9,6 +9,8 @@ from PySide6.QtWidgets import (QApplication,
                                QHBoxLayout,
                                QVBoxLayout,
                                QLabel,
+                               QCheckBox,
+                               QComboBox,
                                QFrame,
                                QFormLayout,
                                QGridLayout,
@@ -29,14 +31,37 @@ class EntryPanel(QWidget):
         
 
 
-class PrefPanel(QWidget):
-    def __init__(self):
+class GroupPanel(QWidget):
+    def __init__(self, plan):
         super().__init__()
-        self.button = QPushButton("Hej")
-        entry1 = EntryPanel()
-        
+        self.plan = plan #Plan()
+
+    def makeCourseList(self):
+        fullPlan = {}
+        if len(self.plan):
+            for group in self.plan[0]:
+                if group.course.name not in fullPlan.keys():
+                    fullPlan[group.course.name] = []
+                fullPlan[group.course.name].append(group)
+                
+                    
+            return fullPlan
+        return None
+
+
+    def printGroups(self):
         layout = QVBoxLayout()
-        layout.addWidget(self.button)
-        layout.addWidget(entry1)
+        for course in self.plan.courseList:
+            courseName = QLabel(course.name)
+            courseDropdown = QComboBox()
+            
+            for type in course.typeList:
+                for group in type:
+                    # group = QCheckBox(group.giveKey())
+                    # layout.addWidget(group)
+                    courseDropdown.addItem(group.giveKey())
+            layout.addWidget(courseName)
+            layout.addWidget(courseDropdown)
+        
         self.setLayout(layout)
         

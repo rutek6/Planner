@@ -5,7 +5,7 @@ from src.conflictGraph import checkOverlap
 from src.optimizer import evaluatePlan, optimize
 from src.plan import dfs
 
-from gui.prefPanel import PrefPanel
+from gui.groupPanel import GroupPanel
 from gui.timetable import Schedule, prepareForAdding
 from gui.menu import Menu
 
@@ -36,17 +36,19 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         
-        self.schedule = Schedule()
-        self.menu = Menu()
-        self.prefPanel = PrefPanel()
-        layout = QGridLayout()
-        
         #Original list of plans with all possible combinations
         self.plan = None
 
         #Optimized list of plans with some combinations removed
         self.planOptimized = None
         self.planNr = 0
+
+        self.schedule = Schedule()
+        self.menu = Menu()
+        self.groupPanel = GroupPanel(self.plan)
+        layout = QGridLayout()
+        
+        
         
         self.setWindowTitle("Planner")
         
@@ -54,7 +56,7 @@ class MainWindow(QWidget):
     
         layout.addWidget(self.menu, 0, 0)
         layout.addWidget(self.schedule, 1, 0)
-        layout.addWidget(self.prefPanel, 0, 1)
+        layout.addWidget(self.groupPanel, 0, 1)
 
         layout.setColumnStretch(0, 4)
         layout.setColumnStretch(1, 1)
@@ -71,11 +73,14 @@ class MainWindow(QWidget):
     def getHTML(self):
         path = QFileDialog.getOpenFileName()
         parsed = parseHTML(path[0])
+        self.groupPanel.plan = parsed
+        self.groupPanel.printGroups()
         self.plan = dfs(parsed)
         self.planOptimized = self.plan.copy()
         self.planOptimized = optimize(self.planOptimized)
         print(len(self.plan))
         print(len(self.planOptimized))
+        print("MIAAU")
         # self.plan.sort(key=evaluatePlan)
         self.menu.nrOfPlans = len(self.planOptimized)
         self.menu.numberPicker.setValue(1)
@@ -86,6 +91,7 @@ class MainWindow(QWidget):
         self.planNr = 0
         self.menu.planNr = 1
         self.menu.updateMenu()
+        
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
 
