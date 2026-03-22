@@ -115,11 +115,11 @@ def prepareForAdding(firstPlan):
             end = slot.end / 60
             name = f"""{group.course.name} \n {group.giveKey()} \n {(slot.start // 60)}:{slot.start % 60:02d} - {(slot.end // 60)}:{slot.end % 60:02d}"""
             if group.type == "CW":
-                color = "#E05555"
+                color = "#464C5F"
             elif group.type == "WYK":
-                color = "#6F6F6F"
+                color = "#2B3F82"
             else:
-                color = "#99582A"
+                color = "#3853AB"
             overlap = 0
             for compareSlot in listOfGroups:
                 if not day == compareSlot[0]:
