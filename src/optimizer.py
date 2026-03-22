@@ -1,8 +1,5 @@
 from src.classes import *
-
-class weights:
-    def __init__(self, start):
-        self.start = start
+from src.preferences import Preferences
 
 def getSlotList(plan: Plan):
     slots = []
@@ -44,10 +41,28 @@ def countGapLength(slots):
                 gapCount += add
     return gapCount
 
-def evaluatePlan(plan: list[Group]):
+#Returns False if slots don't fill the preferences
+def checkPrefferedHours(slots, preferences):
+    for slot in slots:
+        if slot.start < preferences.preferredHours[slot.day][0]:
+            return False
+        if slot.end > preferences.preferredHours[slot.day][1]:
+            return False
+    return True
+
+
+def evaluatePlan(plan: list[Group], preferences: Preferences = None):
     slots = getSlotList(plan) #list[TimeSlot]
     conflictNr = countConflicts(slots)
     gapLength = countGapLength(slots)
-    # print(f"Conflicts: {conflictNr}")
-    # print(f"Gap Length: {gapLength}")
+    
     return conflictNr*150 + gapLength
+
+def optimize(planList: list[Plan], preferences = Preferences()):
+    for plan in planList:
+        slots = getSlotList(plan) #list[TimeSlot]
+        if not checkPrefferedHours(slots, preferences):
+            planList.remove(plan)
+
+    planList.sort(key=evaluatePlan)
+    return planList

@@ -2,7 +2,7 @@ from src.classes import *
 
 from src.parser import parseHTML
 from src.conflictGraph import checkOverlap
-from src.optimizer import evaluatePlan
+from src.optimizer import evaluatePlan, optimize
 from src.plan import dfs
 
 from gui.prefPanel import PrefPanel
@@ -40,11 +40,13 @@ class MainWindow(QWidget):
         self.menu = Menu()
         self.prefPanel = PrefPanel()
         layout = QGridLayout()
-
+        
+        #Original list of plans with all possible combinations
         self.plan = None
+
+        #Optimized list of plans with some combinations removed
+        self.planOptimized = None
         self.planNr = 0
-        
-        
         
         self.setWindowTitle("Planner")
         
@@ -70,10 +72,14 @@ class MainWindow(QWidget):
         path = QFileDialog.getOpenFileName()
         parsed = parseHTML(path[0])
         self.plan = dfs(parsed)
-        self.plan.sort(key=evaluatePlan)
-        self.menu.nrOfPlans = len(self.plan)
+        self.planOptimized = self.plan.copy()
+        self.planOptimized = optimize(self.planOptimized)
+        print(len(self.plan))
+        print(len(self.planOptimized))
+        # self.plan.sort(key=evaluatePlan)
+        self.menu.nrOfPlans = len(self.planOptimized)
         self.menu.numberPicker.setValue(1)
-        firstPlan = self.plan[0]
+        firstPlan = self.planOptimized[0]
         listOfGroups = prepareForAdding(firstPlan)
         self.schedule.destroyPlan()
         
@@ -89,7 +95,7 @@ class MainWindow(QWidget):
         self.menu.planNr = self.planNr + 1
         self.menu.numberPicker.setValue(self.planNr + 1)
         self.menu.updateMenu()
-        planToShow = self.plan[self.planNr]
+        planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
@@ -103,7 +109,7 @@ class MainWindow(QWidget):
         self.menu.numberPicker.setValue(self.planNr + 1)
         self.menu.updateMenu()
 
-        planToShow = self.plan[self.planNr]
+        planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
@@ -114,7 +120,7 @@ class MainWindow(QWidget):
         self.planNr = shownPlanNr - 1
         self.menu.planNr = self.planNr + 1
         self.menu.updateMenu()
-        planToShow = self.plan[self.planNr]
+        planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
