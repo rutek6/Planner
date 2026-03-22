@@ -21,12 +21,16 @@ from PySide6.QtWidgets import (QApplication,
 class Menu(QWidget):
     def __init__(self):
         super().__init__()
+
         self.path = ""
         self.planNr = 1
+        self.nrOfPlans = None
         self.button = QPushButton("Otwórz HTML")
         self.button2 = QPushButton("Prev")
         self.button3 = QPushButton("Next")
-        self.planLabel = QLabel(str(self.planNr))
+        
+        self.planLabel = QLabel(f"{str(self.planNr)} / {self.nrOfPlans}")
+
         self.button.setFixedWidth(150)
         self.button2.setFixedWidth(150)
         self.button3.setFixedWidth(150)
@@ -38,6 +42,9 @@ class Menu(QWidget):
         
         self.setLayout(layout)
 
+    def updateMenu(self):
+        self.planLabel.setText(f"{str(self.planNr)} / {self.nrOfPlans}")
+        self.planLabel.repaint()
     
     
 class Footer(QWidget):
@@ -75,31 +82,37 @@ class MainWindow(QWidget):
     def getHTML(self):
         path = QFileDialog.getOpenFileName()
         parsed = parseHTML(path[0])
-        # parsed = parseHTML("plan.html")
         self.plan = dfs(parsed)
         self.plan.sort(key=evaluatePlan)
+        self.menu.nrOfPlans = len(self.plan)
         firstPlan = self.plan[0]
         listOfGroups = prepareForAdding(firstPlan)
+        self.schedule.destroyPlan()
+        
+        self.planNr = 0
+        self.menu.planNr = 1
+        self.menu.updateMenu()
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
 
     def getNextPlan(self):
         self.schedule.destroyPlan()
         self.planNr += 1
-        self.menu.planNr = self.planNr
-        self.menu.planLabel.repaint()
-        self.menu.planLabel.update()
+        self.menu.planNr = self.planNr + 1
+        self.menu.updateMenu()
         planToShow = self.plan[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
 
     def getPrevPlan(self):
-        self.schedule.destroyPlan()
         if self.planNr == 0:
             return
+        self.schedule.destroyPlan()
         self.planNr -= 1
-        self.menu.planNr = self.planNr
+        
+        self.menu.planNr = self.planNr + 1
+        self.menu.updateMenu()
         planToShow = self.plan[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
