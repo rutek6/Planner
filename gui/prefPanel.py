@@ -1,13 +1,6 @@
 from src.classes import *
-from src.parser import parseHTML
-from src.conflictGraph import checkOverlap
-from src.optimizer import evaluatePlan
-from src.plan import dfs
-
 from gui.timetable import Schedule, prepareForAdding
-
 import sys
-
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QApplication, 

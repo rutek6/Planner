@@ -1,9 +1,6 @@
 import sys
 from src.classes import *
-from src.parser import parseHTML
-from src.conflictGraph import checkOverlap
-from src.optimizer import evaluatePlan
-from src.plan import dfs
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QApplication, 
@@ -135,17 +132,3 @@ def prepareForAdding(firstPlan):
                     overlap = 2
             listOfGroups.append([day, start, end, name, color, overlap])
     return listOfGroups        
-
-# if __name__ == "__main__":
-#     app = QApplication()
-#     schedule = Schedule()
-    
-#     parsed = parseHTML()
-#     plan = dfs(parsed)
-#     plan.sort(reverse=False, key=evaluatePlan)
-#     firstPlan = plan[10]
-#     listOfGroups = prepareForAdding(firstPlan)
-#     for item in listOfGroups:
-#         schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
-#     schedule.show()
-#     sys.exit(app.exec())
