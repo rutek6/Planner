@@ -54,9 +54,9 @@ class MainWindow(QWidget):
         
         self.schedule.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     
-        layout.addWidget(self.menu, 0, 0)
-        layout.addWidget(self.schedule, 1, 0)
-        layout.addWidget(self.groupPanel, 0, 1)
+        layout.addWidget(self.menu, 0, 0, 1, 1)
+        layout.addWidget(self.schedule, 1, 0, 1, 1)
+        layout.addWidget(self.groupPanel, 0, 1, 2, 1)
 
         layout.setColumnStretch(0, 4)
         layout.setColumnStretch(1, 1)

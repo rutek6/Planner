@@ -1,23 +1,9 @@
 from src.classes import *
 from gui.timetable import Schedule, prepareForAdding
 import sys
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (QApplication, 
-                               QPushButton, 
-                               QWidget,
-                               QHBoxLayout,
-                               QVBoxLayout,
-                               QLabel,
-                               QCheckBox,
-                               QComboBox,
-                               QFrame,
-                               QFormLayout,
-                               QGridLayout,
-                               QSizePolicy,
-                               QSpinBox,
-                               QMainWindow,
-                               QFileDialog)
+from PySide6.QtCore import  *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
 class EntryPanel(QWidget):
     def __init__(self):
         super().__init__()
@@ -50,18 +36,24 @@ class GroupPanel(QWidget):
 
 
     def printGroups(self):
-        layout = QVBoxLayout()
+        view = QTreeView()
+        model = QStandardItemModel()
+        model.setHorizontalHeaderLabels(["Wybierz grupy:"])
         for course in self.plan.courseList:
-            courseName = QLabel(course.name)
-            courseDropdown = QComboBox()
-            
+            courseName = QStandardItem(course.name)
             for type in course.typeList:
+                type.sort(key=lambda x: int(x.number))
                 for group in type:
-                    # group = QCheckBox(group.giveKey())
-                    # layout.addWidget(group)
-                    courseDropdown.addItem(group.giveKey())
-            layout.addWidget(courseName)
-            layout.addWidget(courseDropdown)
-        
+                    child = QStandardItem(group.giveKey())
+                    child.setCheckable(True)
+                    courseName.appendRow(child)
+            model.appendRow(courseName)
+        view.setModel(model)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(view)
         self.setLayout(layout)
+           
+        
+        
         
