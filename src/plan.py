@@ -1,5 +1,5 @@
-from classes import *
-from conflictGraph import *
+from src.classes import *
+from src.conflictGraph import *
 
 def checkConflict(group: Group, compareList: list[Group], conflictGraph) -> bool:
     if len(compareList) == 0:

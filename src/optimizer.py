@@ -1,4 +1,4 @@
-from classes import *
+from src.classes import *
 
 class weights:
     def __init__(self, start):

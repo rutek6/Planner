@@ -1,9 +1,9 @@
 import sys
-from classes import *
-from parser import parseHTML
-from conflictGraph import checkOverlap
-from optimizer import evaluatePlan
-from plan import dfs
+from src.classes import *
+from src.parser import parseHTML
+from src.conflictGraph import checkOverlap
+from src.optimizer import evaluatePlan
+from src.plan import dfs
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QApplication, 
@@ -50,7 +50,6 @@ class Schedule(QWidget):
         self.setStyleSheet("""
                            background-color: #2A2A2A;
                            """)
-        # self.resize(1350, 800)
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
         self.drawGrid()
 

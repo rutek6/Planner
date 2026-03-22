@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-import classes
+from src.classes import *
 import re
 
 
@@ -101,10 +101,10 @@ def parseHTML(path):
             person = person.split(",")[0]
 
         # Creating classes
-        slot = classes.TimeSlot(day, startMinutes, endMinutes, 0)
+        slot = TimeSlot(day, startMinutes, endMinutes, 0)
 
         if courseName not in courseDict:
-            courseDict[courseName] = classes.Course(courseName)
+            courseDict[courseName] = Course(courseName)
         
         isTypeIncluded = False
         i = 0
@@ -134,13 +134,13 @@ def parseHTML(path):
                 group.slotList.append(slot)
 
         if isGroupIncluded == False:
-            groupToInsert = classes.Group(groupType, groupNumber, person, courseDict[courseName], groupId)
+            groupToInsert = Group(groupType, groupNumber, person, courseDict[courseName], groupId)
             groupToInsert.slotList.append(slot)
             courseDict[courseName].typeList[typeNr].append(groupToInsert)
             groupId += 1
 
     #Creating plan class:
-    plan = classes.Plan()
+    plan = Plan()
     for course in courseDict.values():
         plan.courseList.append(course)
     return plan
