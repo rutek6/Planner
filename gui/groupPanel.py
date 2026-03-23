@@ -48,14 +48,14 @@ class GroupPanel(QWidget):
         layout.addWidget(self.applyButton)
         self.setLayout(layout)
     
-    
 
     def giveChosenGroups(self):
         for course, list in self.checkboxDict.items():
             for tuple in list:
                 if tuple[0].checkState() == Qt.Checked:
-                    
                     self.chosenGroups.append(tuple[1])
+
+        
         return self.chosenGroups
 
            

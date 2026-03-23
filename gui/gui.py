@@ -126,6 +126,22 @@ class MainWindow(QWidget):
 
     def applyPrefs(self):
         self.preferences.requiredGroupList = self.groupPanel.giveChosenGroups()
+        print(self.preferences.requiredGroupList)
+        self.planOptimized = self.plan.copy()
+        self.planOptimized = optimize(self.planOptimized, self.preferences)
+
+        self.menu.nrOfPlans = len(self.planOptimized)
+        self.menu.numberPicker.setValue(1)
+        firstPlan = self.planOptimized[0]
+        listOfGroups = prepareForAdding(firstPlan)
+        self.schedule.destroyPlan()
+        
+        self.planNr = 0
+        self.menu.planNr = 1
+        self.menu.updateMenu()
+        
+        for item in listOfGroups:
+            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
 
 if __name__ == "__main__":
     app = QApplication()

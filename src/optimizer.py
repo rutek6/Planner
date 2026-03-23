@@ -50,19 +50,52 @@ def checkPrefferedHours(slots, preferences):
             return False
     return True
 
+def checkRequiredGroups(plan: Plan, preferences: Preferences):
+    print("MIAU")
+    for course in plan.courseList:
+        for type in course.typeList:
+            
+            if not type:
+                continue
+            typeInPrefs = False
+            for group in preferences.requiredGroupList:
+                if group.course is course and group.type == type[0].type:
+                    typeInPrefs = True
+            if typeInPrefs:
+                requiredInPlan = False
+                for group1 in type:
+                    for group2 in preferences.requiredGroupList:
+                        if group1 is group2:
+                            requiredInPlan = True
+            else:
+                continue
 
-def evaluatePlan(plan: list[Group], preferences: Preferences = None):
+            if requiredInPlan:
+                continue
+            else:
+                return False
+    return True
+
+
+
+def evaluatePlan(plan: list[Group]):
     slots = getSlotList(plan) #list[TimeSlot]
     conflictNr = countConflicts(slots)
     gapLength = countGapLength(slots)
-    
     return conflictNr*150 + gapLength
 
 def optimize(planList: list[Plan], preferences = Preferences()):
+    if not preferences:
+        preferences = Preferences()
+
     for plan in planList:
         slots = getSlotList(plan) #list[TimeSlot]
         if not checkPrefferedHours(slots, preferences):
             planList.remove(plan)
+            continue
+        if not checkRequiredGroups(plan, preferences):
+            planList.remove(plan)
+            continue
 
     planList.sort(key=evaluatePlan)
     return planList
