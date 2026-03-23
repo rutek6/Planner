@@ -125,6 +125,7 @@ class MainWindow(QWidget):
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
 
     def applyPrefs(self):
+        self.groupPanel.chosenGroups.clear()
         self.preferences.requiredGroupList = self.groupPanel.giveChosenGroups()
         print(self.preferences.requiredGroupList)
         self.planOptimized = self.plan.copy()

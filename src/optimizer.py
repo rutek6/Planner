@@ -44,36 +44,16 @@ def countGapLength(slots):
 #Returns False if slots don't fill the preferences
 def checkPrefferedHours(slots, preferences):
     for slot in slots:
-        if slot.start < preferences.preferredHours[slot.day][0]:
+        if slot.start < preferences.preferredHours[slot.day][0]*60:
+            print(slots)
             return False
-        if slot.end > preferences.preferredHours[slot.day][1]:
+        if slot.end > preferences.preferredHours[slot.day][1]*60:
+            print(slots)
             return False
+        
     return True
 
-def checkRequiredGroups(plan: Plan, preferences: Preferences):
-    print("MIAU")
-    for course in plan.courseList:
-        for type in course.typeList:
-            
-            if not type:
-                continue
-            typeInPrefs = False
-            for group in preferences.requiredGroupList:
-                if group.course is course and group.type == type[0].type:
-                    typeInPrefs = True
-            if typeInPrefs:
-                requiredInPlan = False
-                for group1 in type:
-                    for group2 in preferences.requiredGroupList:
-                        if group1 is group2:
-                            requiredInPlan = True
-            else:
-                continue
-
-            if requiredInPlan:
-                continue
-            else:
-                return False
+def checkRequiredGroups(plan: list[Group], preferences: Preferences):
     return True
 
 
@@ -84,18 +64,22 @@ def evaluatePlan(plan: list[Group]):
     gapLength = countGapLength(slots)
     return conflictNr*150 + gapLength
 
-def optimize(planList: list[Plan], preferences = Preferences()):
-    if not preferences:
-        preferences = Preferences()
-
+def optimize(planList: list[list[Group]], preferences = Preferences()):
+    toRemove = []
+    
     for plan in planList:
         slots = getSlotList(plan) #list[TimeSlot]
-        if not checkPrefferedHours(slots, preferences):
-            planList.remove(plan)
+        if checkPrefferedHours(slots, preferences) is False:
+            toRemove.append(plan)
             continue
-        if not checkRequiredGroups(plan, preferences):
-            planList.remove(plan)
+        if checkRequiredGroups(plan, preferences) is False:
+            
+            toRemove.append(plan)
             continue
-
+    
+    for plan in toRemove:
+        planList.remove(plan)
+        
+    
     planList.sort(key=evaluatePlan)
     return planList
