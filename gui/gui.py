@@ -4,6 +4,7 @@ from src.parser import parseHTML
 from src.conflictGraph import checkOverlap
 from src.optimizer import evaluatePlan, optimize
 from src.plan import dfs
+from src.preferences import *
 
 from gui.groupPanel import GroupPanel
 from gui.timetable import Schedule, prepareForAdding
@@ -25,13 +26,6 @@ from PySide6.QtWidgets import (QApplication,
                                QMainWindow,
                                QFileDialog)
 
-
-    
-
-
-
-
-
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -42,16 +36,16 @@ class MainWindow(QWidget):
         #Optimized list of plans with some combinations removed
         self.planOptimized = None
         self.planNr = 0
+        
+        self.preferences = Preferences()
+
 
         self.schedule = Schedule()
         self.menu = Menu()
         self.groupPanel = GroupPanel(self.plan)
         layout = QGridLayout()
         
-        
-        
         self.setWindowTitle("Planner")
-        
         self.schedule.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
     
         layout.addWidget(self.menu, 0, 0, 1, 1)
@@ -61,11 +55,12 @@ class MainWindow(QWidget):
         layout.setColumnStretch(0, 4)
         layout.setColumnStretch(1, 1)
 
-
         self.menu.button.clicked.connect(self.getHTML)
         self.menu.button2.clicked.connect(self.getPrevPlan)
         self.menu.button3.clicked.connect(self.getNextPlan)
         self.menu.numberPicker.valueChanged.connect(self.getPlanFromNr)
+
+        self.groupPanel.applyButton.clicked.connect(self.applyPrefs)
 
         self.setLayout(layout)
         self.showMaximized()
@@ -76,12 +71,10 @@ class MainWindow(QWidget):
         self.groupPanel.plan = parsed
         self.groupPanel.printGroups()
         self.plan = dfs(parsed)
+
         self.planOptimized = self.plan.copy()
         self.planOptimized = optimize(self.planOptimized)
-        print(len(self.plan))
-        print(len(self.planOptimized))
-        print("MIAAU")
-        # self.plan.sort(key=evaluatePlan)
+
         self.menu.nrOfPlans = len(self.planOptimized)
         self.menu.numberPicker.setValue(1)
         firstPlan = self.planOptimized[0]
@@ -130,6 +123,9 @@ class MainWindow(QWidget):
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
             self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+
+    def applyPrefs(self):
+        self.preferences.requiredGroupList = self.groupPanel.giveChosenGroups()
 
 if __name__ == "__main__":
     app = QApplication()
