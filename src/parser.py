@@ -98,7 +98,8 @@ def parseHTML(path):
         if personRaw:
             person = personRaw.get_text()
             person = person.split(",")[0]
-
+        else:
+            person = None
         # Creating classes
         slot = TimeSlot(day, startMinutes, endMinutes, 0)
 
