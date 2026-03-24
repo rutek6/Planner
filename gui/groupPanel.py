@@ -57,8 +57,8 @@ class GroupPanel(QWidget):
         return self.chosenGroups
 
     def destroyGroupPanel(self):
-        self.model = QStandardItemModel()
-        self.view = QTreeView()
+        self.model.clear()
+        self.checkboxDict.clear()
         self.setLayout(None)
         
         
