@@ -13,41 +13,43 @@ from gui.menu import Menu
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (QApplication, 
-                               QPushButton, 
-                               QWidget,
-                               QHBoxLayout,
-                               QVBoxLayout,
-                               QLabel,
-                               QFormLayout,
-                               QGridLayout,
-                               QSizePolicy,
-                               QSpinBox,
-                               QMainWindow,
-                               QFileDialog)
+from PySide6.QtWidgets import (
+    QApplication,
+    QPushButton,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QFormLayout,
+    QGridLayout,
+    QSizePolicy,
+    QSpinBox,
+    QMainWindow,
+    QFileDialog,
+)
+
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
-        
-        #Original list of plans with all possible combinations
+
+        # Original list of plans with all possible combinations
         self.plan = None
 
-        #Optimized list of plans with some combinations removed
+        # Optimized list of plans with some combinations removed
         self.planOptimized = None
         self.planNr = 0
-        
-        self.preferences = Preferences()
 
+        self.preferences = Preferences()
 
         self.schedule = Schedule()
         self.menu = Menu()
         self.groupPanel = GroupPanel(self.plan)
         layout = QGridLayout()
-        
+
         self.setWindowTitle("Planner")
         self.schedule.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-    
+
         layout.addWidget(self.menu, 0, 0, 1, 1)
         layout.addWidget(self.schedule, 1, 0, 1, 1)
         layout.addWidget(self.groupPanel, 0, 1, 2, 1)
@@ -81,13 +83,13 @@ class MainWindow(QWidget):
         firstPlan = self.planOptimized[0]
         listOfGroups = prepareForAdding(firstPlan)
         self.schedule.destroyPlan()
-        
+
         self.planNr = 0
         self.menu.planNr = 1
         self.menu.updateMenu()
-        
+
         for item in listOfGroups:
-            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+            self.schedule.addEvent(item[0], item[1], item[2], item[3], item[4], item[5])
 
     def getNextPlan(self):
         self.schedule.destroyPlan()
@@ -98,13 +100,13 @@ class MainWindow(QWidget):
         planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
-            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+            self.schedule.addEvent(item[0], item[1], item[2], item[3], item[4], item[5])
 
     def getPrevPlan(self):
         if self.planNr == 0:
             return
         self.schedule.destroyPlan()
-        self.planNr -= 1 
+        self.planNr -= 1
         self.menu.planNr = self.planNr + 1
         self.menu.numberPicker.setValue(self.planNr + 1)
         self.menu.updateMenu()
@@ -112,8 +114,8 @@ class MainWindow(QWidget):
         planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
-            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
-    
+            self.schedule.addEvent(item[0], item[1], item[2], item[3], item[4], item[5])
+
     def getPlanFromNr(self):
         self.schedule.destroyPlan()
         shownPlanNr = self.menu.numberPicker.value()
@@ -123,7 +125,7 @@ class MainWindow(QWidget):
         planToShow = self.planOptimized[self.planNr]
         listOfGroups = prepareForAdding(planToShow)
         for item in listOfGroups:
-            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+            self.schedule.addEvent(item[0], item[1], item[2], item[3], item[4], item[5])
 
     def applyPrefs(self):
         self.groupPanel.chosenGroups.clear()
@@ -136,19 +138,19 @@ class MainWindow(QWidget):
         firstPlan = self.planOptimized[0]
         listOfGroups = prepareForAdding(firstPlan)
         self.schedule.destroyPlan()
-        
+
         self.planNr = 0
         self.menu.planNr = 1
         self.menu.updateMenu()
-        
+
         for item in listOfGroups:
-            self.schedule.addEvent(item[0],item[1],item[2],item[3], item[4], item[5])
+            self.schedule.addEvent(item[0], item[1], item[2], item[3], item[4], item[5])
+
 
 if __name__ == "__main__":
     app = QApplication()
     mainWindow = MainWindow()
     mainWindow.show()
     path = mainWindow.menu.path
-    
+
     sys.exit(app.exec())
-    

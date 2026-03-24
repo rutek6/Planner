@@ -1,19 +1,19 @@
 from src.classes import *
 from gui.timetable import Schedule, prepareForAdding
 import sys
-from PySide6.QtCore import  *
+from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
-        
+
 
 class GroupPanel(QWidget):
     def __init__(self, plan):
         super().__init__()
-        self.plan = plan #Plan()
+        self.plan = plan  # Plan()
         self.view = QTreeView()
         self.model = QStandardItemModel()
         self.applyButton = QPushButton("Zastosuj")
-        self.checkboxDict = {} #[courseName]: (QStandardItem, Group)
+        self.checkboxDict = {}  # [courseName]: (QStandardItem, Group)
         self.chosenGroups = []
 
     def makeCourseList(self):
@@ -23,11 +23,9 @@ class GroupPanel(QWidget):
                 if group.course.name not in fullPlan.keys():
                     fullPlan[group.course.name] = []
                 fullPlan[group.course.name].append(group)
-                
-                    
+
             return fullPlan
         return None
-
 
     def printGroups(self):
         self.model.setHorizontalHeaderLabels(["Wybierz grupy:"])
@@ -47,7 +45,6 @@ class GroupPanel(QWidget):
         layout.addWidget(self.view)
         layout.addWidget(self.applyButton)
         self.setLayout(layout)
-    
 
     def giveChosenGroups(self):
         for course, list in self.checkboxDict.items():
@@ -60,10 +57,3 @@ class GroupPanel(QWidget):
         self.model.clear()
         self.checkboxDict.clear()
         self.setLayout(None)
-        
-        
-
-           
-        
-        
-        

@@ -14,6 +14,7 @@ def checkOverlap(group1: Group, group2: Group):
                 return True
     return False
 
+
 def checkNumberOfGroups(plan: Plan):
     i = 0
     for course in plan.courseList:
@@ -21,6 +22,7 @@ def checkNumberOfGroups(plan: Plan):
             for group in type:
                 i += 1
     return i
+
 
 def extractGroups(plan: Plan):
     groups = []
@@ -36,11 +38,11 @@ def extractGroups(plan: Plan):
 # Each column and row is defined by a unique group id
 # Values: 0 - no conflict between specified groups,
 # 1 - conflict,
-# 2 - acceptable conflict, do not exclude in DFS 
+# 2 - acceptable conflict, do not exclude in DFS
 #
 def createConflictGraph(plan: Plan):
     numberOfGroups = checkNumberOfGroups(plan)
-    conflictGraph = [[0]*numberOfGroups for _ in range(numberOfGroups)]
+    conflictGraph = [[0] * numberOfGroups for _ in range(numberOfGroups)]
     acceptedTypes = ["CWW", "WYK"]
     groupList = extractGroups(plan)
     for group1 in groupList:
@@ -54,6 +56,3 @@ def createConflictGraph(plan: Plan):
             if checkOverlap(group1, group2):
                 conflictGraph[group1.groupId][group2.groupId] = 1
     return conflictGraph
-            
-
-

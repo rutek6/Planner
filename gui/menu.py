@@ -7,18 +7,20 @@ from src.plan import dfs
 import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (QApplication, 
-                               QPushButton, 
-                               QWidget,
-                               QHBoxLayout,
-                               QVBoxLayout,
-                               QLabel,
-                               QFormLayout,
-                               QGridLayout,
-                               QSizePolicy,
-                               QSpinBox,
-                               QMainWindow,
-                               QFileDialog)
+from PySide6.QtWidgets import (
+    QApplication,
+    QPushButton,
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QFormLayout,
+    QGridLayout,
+    QSizePolicy,
+    QSpinBox,
+    QMainWindow,
+    QFileDialog,
+)
 
 
 class Menu(QWidget):
@@ -35,7 +37,6 @@ class Menu(QWidget):
         self.planLabel = QLabel(f"{str(self.planNr)} / {self.nrOfPlans}")
 
         self.numberPicker.setMinimum(1)
-        
 
         self.button.setFixedWidth(150)
         self.button2.setFixedWidth(150)
@@ -47,7 +48,7 @@ class Menu(QWidget):
         layout.addWidget(self.button3)
         layout.addWidget(self.numberPicker)
         layout.addWidget(self.planLabel)
-        
+
         self.setLayout(layout)
 
     def updateMenu(self):

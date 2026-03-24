@@ -3,22 +3,27 @@ from src.classes import *
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import (QApplication, 
-                               QDialog, 
-                               QLineEdit, 
-                               QPushButton, 
-                               QVBoxLayout, 
-                               QTableWidget, 
-                               QTableWidgetItem,
-                               QLabel,
-                               QListWidget,
-                               QListWidgetItem,
-                               QWidget,
-                               QHBoxLayout)
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QWidget,
+    QHBoxLayout,
+)
+
+
 class TimetableEntry(QLabel):
     def __init__(self, text, color, parent=None):
         super().__init__(text, parent)
-        self.setStyleSheet(f"""QLabel{{ background-color: {color};
+        self.setStyleSheet(
+            f"""QLabel{{ background-color: {color};
                             border-radius: 12px;
                             padding: 5px;
                             color: #EAEAEA;
@@ -26,11 +31,9 @@ class TimetableEntry(QLabel):
                             QLabel::hover{{
                             border: 1px solid black;
                             }}"""
-                            )
+        )
         self.setWordWrap(True)
         self.setToolTip(f"{text}")
-    
-    
 
 
 class Schedule(QWidget):
@@ -44,68 +47,86 @@ class Schedule(QWidget):
         self.start = 7
         self.end = 20
         self.displayedEvents = []
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
                            background-color: #2A2A2A;
-                           """)
+                           """
+        )
         self.days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"]
         self.drawGrid()
 
     def drawGrid(self):
         for i, day in enumerate(self.days):
             label = QLabel(day, self)
-            label.move(self.leftMargin + i*self.dayWidth + 2*self.dayWidth/5 - 5, #TO-DO: FIX DAY NAME ALIGNMENT
-                        self.topMargin)
-            
+            label.move(
+                self.leftMargin
+                + i * self.dayWidth
+                + 2 * self.dayWidth / 5
+                - 5,  # TO-DO: FIX DAY NAME ALIGNMENT
+                self.topMargin,
+            )
+
             vLine = QLabel(self)
-            vLine.setStyleSheet("""
+            vLine.setStyleSheet(
+                """
                                 background-color: #C4C4C4;
-                                """)
-            vLine.setGeometry(self.leftMargin + i*self.dayWidth,
-                            self.topMargin,
-                            1, 
-                            (self.end - self.start + 2)*self.verticalSpace)
+                                """
+            )
+            vLine.setGeometry(
+                self.leftMargin + i * self.dayWidth,
+                self.topMargin,
+                1,
+                (self.end - self.start + 2) * self.verticalSpace,
+            )
         vLine = QLabel(self)
-        vLine.setStyleSheet("""
+        vLine.setStyleSheet(
+            """
                             background-color: #C4C4C4;
-                            """)
-        vLine.setGeometry(self.leftMargin + 5*self.dayWidth,
-                            self.topMargin,
-                            1, 
-                            (self.end - self.start + 2)*self.verticalSpace)
-        
+                            """
+        )
+        vLine.setGeometry(
+            self.leftMargin + 5 * self.dayWidth,
+            self.topMargin,
+            1,
+            (self.end - self.start + 2) * self.verticalSpace,
+        )
+
         for i in range(self.start, self.end + 1):
-            y = self.topMargin + 5 + (i-self.start+1)*self.verticalSpace
+            y = self.topMargin + 5 + (i - self.start + 1) * self.verticalSpace
 
             hourLabel = QLabel(f"{i}:00", self)
-            hourLabel.move(15, y) 
+            hourLabel.move(15, y)
 
             hLine = QLabel(self)
-            hLine.setStyleSheet("""
+            hLine.setStyleSheet(
+                """
                                 background-color: #C4C4C4;
-                                """)
-            hLine.setGeometry(self.leftMargin, y, len(self.days)*self.dayWidth, 1)
+                                """
+            )
+            hLine.setGeometry(self.leftMargin, y, len(self.days) * self.dayWidth, 1)
 
     def addEvent(self, day, start, end, text, color, overlap):
-        x = self.leftMargin + self.dayWidth*day + 5
-        y = self.topMargin + 5 + (start - self.start + 1)*self.verticalSpace + 2
+        x = self.leftMargin + self.dayWidth * day + 5
+        y = self.topMargin + 5 + (start - self.start + 1) * self.verticalSpace + 2
         width = self.dayWidth - 10
         if overlap == 1:
             width /= 2
         elif overlap == 2:
             width /= 2
-            x += self.dayWidth/2 - 2.5
-        height = (end-start)*self.verticalSpace - 2
+            x += self.dayWidth / 2 - 2.5
+        height = (end - start) * self.verticalSpace - 2
         block = TimetableEntry(text, color, self)
         block.setGeometry(x, y, width, height)
         block.raise_()
         block.show()
         self.displayedEvents.append(block)
-    
+
     def destroyPlan(self):
         for event in self.displayedEvents:
             event.deleteLater()
         self.displayedEvents.clear()
-        
+
+
 def prepareForAdding(firstPlan):
     listOfGroups = []
     for group in firstPlan:
@@ -131,4 +152,4 @@ def prepareForAdding(firstPlan):
                     compareSlot[5] = 1
                     overlap = 2
             listOfGroups.append([day, start, end, name, color, overlap])
-    return listOfGroups        
+    return listOfGroups
