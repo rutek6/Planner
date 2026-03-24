@@ -45,16 +45,36 @@ def countGapLength(slots):
 def checkPrefferedHours(slots, preferences):
     for slot in slots:
         if slot.start < preferences.preferredHours[slot.day][0]*60:
-            print(slots)
             return False
         if slot.end > preferences.preferredHours[slot.day][1]*60:
-            print(slots)
             return False
         
     return True
 
 def checkRequiredGroups(plan: list[Group], preferences: Preferences):
+    prefDict = {} #course.name: (dict[type]: list[Group])
+    for group in preferences.requiredGroupList:
+        if group.course.name not in prefDict.keys():
+            prefDict[group.course.name] = {}
+        if group.type not in prefDict[group.course.name].keys():
+            prefDict[group.course.name][group.type] = []
+        prefDict[group.course.name][group.type].append(group)
+
+    for _, typeDict in prefDict.items():
+        for _, groupList in typeDict.items():
+            if not groupList:
+                continue
+            else:
+                isPlanCorrect = False
+                for group in groupList:
+                    if group in plan:
+                        isPlanCorrect = True
+                        break
+                if not isPlanCorrect:
+                    return False
     return True
+
+
 
 
 
@@ -73,7 +93,6 @@ def optimize(planList: list[list[Group]], preferences = Preferences()):
             toRemove.append(plan)
             continue
         if checkRequiredGroups(plan, preferences) is False:
-            
             toRemove.append(plan)
             continue
     

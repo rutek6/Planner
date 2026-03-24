@@ -16,7 +16,6 @@ def parseHTML(path):
 
     with open(path, encoding="utf-8") as fp:
         soup = BeautifulSoup(fp, 'html.parser')
-    print("OPENED")
     entriesList = soup.find_all("timetable-entry")
 
     #course_name -> list[Group]

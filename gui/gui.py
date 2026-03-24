@@ -69,6 +69,7 @@ class MainWindow(QWidget):
         path = QFileDialog.getOpenFileName()
         parsed = parseHTML(path[0])
         self.groupPanel.plan = parsed
+        self.groupPanel.destroyGroupPanel()
         self.groupPanel.printGroups()
         self.plan = dfs(parsed)
 
@@ -127,7 +128,6 @@ class MainWindow(QWidget):
     def applyPrefs(self):
         self.groupPanel.chosenGroups.clear()
         self.preferences.requiredGroupList = self.groupPanel.giveChosenGroups()
-        print(self.preferences.requiredGroupList)
         self.planOptimized = self.plan.copy()
         self.planOptimized = optimize(self.planOptimized, self.preferences)
 

@@ -10,6 +10,8 @@ class GroupPanel(QWidget):
     def __init__(self, plan):
         super().__init__()
         self.plan = plan #Plan()
+        self.view = QTreeView()
+        self.model = QStandardItemModel()
         self.applyButton = QPushButton("Zastosuj")
         self.checkboxDict = {} #[courseName]: (QStandardItem, Group)
         self.chosenGroups = []
@@ -28,8 +30,6 @@ class GroupPanel(QWidget):
 
 
     def printGroups(self):
-        self.view = QTreeView()
-        self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Wybierz grupy:"])
         for course in self.plan.courseList:
             courseName = QStandardItem(course.name)
@@ -54,9 +54,14 @@ class GroupPanel(QWidget):
             for tuple in list:
                 if tuple[0].checkState() == Qt.Checked:
                     self.chosenGroups.append(tuple[1])
-
-        
         return self.chosenGroups
+
+    def destroyGroupPanel(self):
+        self.model = QStandardItemModel()
+        self.view = QTreeView()
+        self.setLayout(None)
+        
+        
 
            
         

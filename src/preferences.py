@@ -8,4 +8,4 @@ class Preferences:
         self.requiredFreeDays = []
 
 pref = Preferences()
-print(pref.preferredHours[0])
+
