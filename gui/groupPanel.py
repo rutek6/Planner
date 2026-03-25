@@ -10,6 +10,7 @@ class GroupPanel(QWidget):
     def __init__(self, plan):
         super().__init__()
         self.plan = plan  # Plan()
+        self.time = QTimeEdit()
         self.view = QTreeView()
         self.model = QStandardItemModel()
         self.applyButton = QPushButton("Zastosuj")
@@ -42,6 +43,7 @@ class GroupPanel(QWidget):
             self.model.appendRow(courseName)
         self.view.setModel(self.model)
         layout = QVBoxLayout(self)
+        layout.addWidget(self.time)
         layout.addWidget(self.view)
         layout.addWidget(self.applyButton)
         self.setLayout(layout)
