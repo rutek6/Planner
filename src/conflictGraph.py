@@ -8,9 +8,9 @@ def checkOverlap(group1: Group, group2: Group):
                 continue
             if not slot1.week == slot2.week:
                 continue
-            if slot1.start >= slot2.start and slot1.start <= slot2.end:
+            if slot2.start <= slot1.start <= slot2.end:
                 return True
-            if slot1.end >= slot2.start and slot1.end <= slot2.end:
+            if slot2.start <= slot1.end <= slot2.end:
                 return True
     return False
 

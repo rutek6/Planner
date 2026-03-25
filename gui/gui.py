@@ -83,7 +83,7 @@ class MainWindow(QWidget):
         firstPlan = self.planOptimized[0]
         listOfGroups = prepareForAdding(firstPlan)
         self.schedule.destroyPlan()
-        print("TEST")
+
         self.planNr = 0
         self.menu.planNr = 1
         self.menu.updateMenu()
