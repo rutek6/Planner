@@ -2,3 +2,4 @@ __pycache__/
 plan.html
 test.py
 /venv/
+/.archvenv/
